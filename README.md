@@ -24,7 +24,7 @@
 `<Loader>`, `<Button>` и `<Modal>`. Готовые стили компонентов можно взять в
 файле [styles.css](./styles.css) и подправить под себя, если необходимо.
 
-![preview](./mockup/preview.jpg)
+![preview](https://github.com/goitacademy/react-homework/blob/master/homework-03/image-finder/mockup/preview.jpg)
 
 ## Инструкция Pixabay API
 
