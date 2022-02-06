@@ -24,8 +24,9 @@ export class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
     const nextQuery = this.state.query;
+    const { page } = this.state;
 
-    if (prevQuery !== nextQuery) {
+    if (prevQuery !== nextQuery || (prevState.page !== page && page !== 1)) {
       this.fetchImages();
     }
   }
@@ -52,9 +53,17 @@ export class App extends Component {
           toast.info("You've reached the end of search results.");
         }
 
-        this.setState(({ images, page }) => ({
-          images: [...images, ...hits],
-          page: page + 1,
+        const data = hits.map(({ id, webformatURL, largeImageURL, tags }) => {
+          return {
+            id,
+            webformatURL,
+            largeImageURL,
+            tags,
+          };
+        });
+        this.setState(({ images }) => ({
+          images: [...images, ...data],
+          // page: page + 1,
           total: totalHits,
         }));
       })
@@ -70,6 +79,13 @@ export class App extends Component {
       page: 1,
       error: null,
     });
+  };
+
+  onLoadMore = () => {
+    this.setState(({ page }) => ({
+      page: page + 1,
+      isLoading: true,
+    }));
   };
 
   toggleModal = largeImageURL => {
@@ -98,7 +114,7 @@ export class App extends Component {
           <ImageGallery images={images} onClick={this.toggleModal} />
         )}
 
-        {loadMoreBtn && <Button onClick={this.fetchImages}>Load more</Button>}
+        {loadMoreBtn && <Button onClick={this.onLoadMore}>Load more</Button>}
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
